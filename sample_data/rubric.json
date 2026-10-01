@@ -1,0 +1,107 @@
+{
+  "subject": "Computer Networks & Operating Systems",
+  "total_marks": 20,
+  "questions": [
+    {
+      "question_no": "Q1",
+      "max_marks": 5.0,
+      "title": "TCP 3-Way Handshake",
+      "question_text": "Explain the TCP 3-Way Handshake mechanism for establishing a reliable connection.",
+      "rubric_criteria": [
+        {
+          "criterion_id": "c1",
+          "points": 1.5,
+          "description": "Client sends SYN packet with an initial sequence number (ISN)."
+        },
+        {
+          "criterion_id": "c2",
+          "points": 1.5,
+          "description": "Server responds with SYN-ACK packet, acknowledging client ISN and sending its own sequence number."
+        },
+        {
+          "criterion_id": "c3",
+          "points": 1.0,
+          "description": "Client sends ACK packet to confirm server response, establishing full-duplex connection."
+        },
+        {
+          "criterion_id": "c4",
+          "points": 1.0,
+          "description": "Mention of sequence number synchronization or state transitions (LISTEN -> SYN_SENT -> SYN_RCVD -> ESTABLISHED)."
+        }
+      ],
+      "model_answer": "The TCP 3-Way Handshake establishes a connection between client and server. 1) SYN: Client sends a SYN segment with sequence number X to server. 2) SYN-ACK: Server receives SYN and replies with SYN-ACK, acknowledging X+1 and sending its own seq number Y. 3) ACK: Client responds with ACK, acknowledging Y+1. Both sides synchronize sequence numbers and transition states to ESTABLISHED."
+    },
+    {
+      "question_no": "Q2",
+      "max_marks": 5.0,
+      "title": "Process vs Thread",
+      "question_text": "Distinguish between a Process and a Thread in Operating Systems.",
+      "rubric_criteria": [
+        {
+          "criterion_id": "c1",
+          "points": 2.0,
+          "description": "Definition: Process is an independent executing program with isolated address space (code, data, heap), while a thread is a lightweight execution unit within a process sharing memory/resources."
+        },
+        {
+          "criterion_id": "c2",
+          "points": 1.5,
+          "description": "Resource & Overhead: Processes require heavy context switching and independent memory allocation. Threads share process memory and have fast lightweight context switching."
+        },
+        {
+          "criterion_id": "c3",
+          "points": 1.5,
+          "description": "Fault Isolation & IPC: Process crash does not affect other processes (high fault isolation) and uses IPC (pipes, sockets). Thread crash can bring down entire process, but inter-thread communication is faster via shared memory."
+        }
+      ],
+      "model_answer": "A process is an isolated program execution unit with dedicated memory (PCB, stack, heap, data). A thread is a lightweight entity inside a process that shares the code and heap segment but has its own register set and stack. Process context switching is expensive, requiring page table updates, whereas thread context switching is fast. Processes have strong fault isolation using IPC, while threads communicate directly through shared variables."
+    },
+    {
+      "question_no": "Q3",
+      "max_marks": 5.0,
+      "title": "OSI Reference Model",
+      "question_text": "Describe the 7 layers of the OSI Reference Model and their main functions, with a diagram.",
+      "rubric_criteria": [
+        {
+          "criterion_id": "c1",
+          "points": 2.0,
+          "description": "Correct enumeration of 7 layers in top-down or bottom-up order: Physical, Data Link, Network, Transport, Session, Presentation, Application."
+        },
+        {
+          "criterion_id": "c2",
+          "points": 2.0,
+          "description": "Key functions: Data Link (framing, MAC address, error detection), Network (routing, IP addressing), Transport (end-to-end reliability, segmentation, port numbers)."
+        },
+        {
+          "criterion_id": "c3",
+          "points": 1.0,
+          "description": "Diagram showing layer stack structure or peer-to-peer data flow / encapsulation."
+        }
+      ],
+      "model_answer": "The OSI model consists of 7 layers: 1) Physical (raw bits over physical medium), 2) Data Link (framing, MAC addressing, node-to-node hop delivery), 3) Network (packet routing, IP addressing), 4) Transport (segmentation, end-to-end error recovery, TCP/UDP), 5) Session (dialog management), 6) Presentation (data encryption, encoding/translation), 7) Application (user interface services like HTTP, FTP). A stack diagram shows encapsulation."
+    },
+    {
+      "question_no": "Q4",
+      "max_marks": 5.0,
+      "title": "DNS Resolution Mechanism",
+      "question_text": "What is DNS resolution and how does recursive vs iterative resolution differ?",
+      "rubric_criteria": [
+        {
+          "criterion_id": "c1",
+          "points": 1.5,
+          "description": "DNS maps human-readable domain names (hostnames) to numeric IP addresses."
+        },
+        {
+          "criterion_id": "c2",
+          "points": 1.75,
+          "description": "Recursive resolution: Client asks recursive resolver to find the IP; resolver performs all necessary upstream queries and returns the final answer."
+        },
+        {
+          "criterion_id": "c3",
+          "points": 1.75,
+          "description": "Iterative resolution: DNS server responds with referral to the next authoritative server (Root -> TLD -> Authoritative), requiring requester to make follow-up queries."
+        }
+      ],
+      "model_answer": "DNS (Domain Name System) resolves domain names like example.com into IP addresses. In recursive query mode, the client requests the DNS resolver to do all the heavy lifting; the resolver contacts root, TLD, and authoritative servers on behalf of the client and returns the resolved IP address. In iterative query mode, if the DNS server doesn't know the IP, it returns the address of another server (referral) so the client must query the next server itself."
+    }
+  ]
+}

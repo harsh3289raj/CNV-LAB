@@ -1,0 +1,41 @@
+{
+  "page1": [
+    "Q1.",
+    "Ans 1: TCP 3-Way Handshake Mechanism",
+    "The TCP 3-way handshake is used to establish a reliable connection between client and server.",
+    "1. SYN: Client sends a SYN segment with initial sequence number (ISN = X) to server.",
+    "2. SYN-ACK: Server receives SYN and responds with SYN-ACK, acknowledging X+1 and sending seq Y.",
+    "3. ACK: Client sends ACK packet acknowledging Y+1 to confirm connection.",
+    "State transition goes from LISTEN -> SYN_SENT -> SYN_RCVD -> ESTABLISHED.",
+    "Q2.",
+    "Ans 2: Process vs Thread Comparison",
+    "A Process is an independent program in execution with isolated virtual address space.",
+    "A Thread is a lightweight unit of execution within a process that shares code and heap memory.",
+    "Context switching in processes requires reloading page tables, so it is high overhead.",
+    "Thread context switching is fast as they share address space.",
+    "Fault Isolation: Process crash is isolated, but a faulty thread can crash the whole process.",
+    "Q3.",
+    "Ans 3: OSI Reference Model 7 Layers & Functions",
+    "The OSI model has 7 layers for network protocol standardization.",
+    "Below is the layer architecture diagram:",
+    "--- OSI 7-LAYER ARCHITECTURE --- 7. Application Layer (HTTP, FTP) 6. Presentation Layer 5. Session Layer 4. Transport Layer 3. Network Layer 2. Data Link Layer 1. Physical Layer",
+    "[Continued on Page 2 for Layer detailed functions --->]"
+  ],
+  "page2": [
+    "Q3.",
+    "Ans 3 (Continued from Page 1): Key Layer Functions",
+    "Detailed functions of primary OSI layers:",
+    "- Data Link Layer: Handles node-to-node framing, MAC addressing, and hardware error detection.",
+    "- Network Layer: Performs logical IP addressing, packet forwarding, and path routing across subnetworks.",
+    "- Transport Layer: Guarantees end-to-end reliability, sequence reordering, segmenting, and port mapping.",
+    "Q4.",
+    "+1 Mark Bonus Check RFC 1035",
+    "Ans 4: DNS Resolution Mechanism",
+    "DNS (Domain Name System) translates human-readable hostnames into IP addresses.",
+    "UDP is never used for DNS queries because IP packets get lost easily.",
+    "1. Recursive Resolution: Client delegates full lookup to local recursive resolver.",
+    "   The resolver traverses Root -> TLD -> Authoritative DNS servers on behalf of client.",
+    "2. Iterative Resolution: DNS server returns referral address of next server to client.",
+    "   The client makes follow-up queries step-by-step until resolved."
+  ]
+}

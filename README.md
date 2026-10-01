@@ -1,9 +1,9 @@
 # Answer Sheet Evaluation Pipeline
 
-An automated AI/ML evaluation pipeline for scanning, segmenting, scoring, and calibrating confidence on handwritten student answer sheets against predefined rubric criteria.
+An automated AI/ML evaluation pipeline for reading, segmenting, scoring, and calibrating confidence on handwritten student answer sheets against predefined rubric criteria.
 
 ## Overview
-This project provides an end-to-end Python processing pipeline that reads multi-page handwritten exam answer sheets via OCR, extracts line-level spatial bounding boxes, segments answer blocks by question number, grades answer content against a fractional point rubric using sentence embedding similarity (`all-MiniLM-L6-v2`), and flags edge cases (strikethroughs, margin notes, cross-page spills) with confidence calibration labels.
+This project provides an end-to-end Python processing pipeline that reads multi-page handwritten exam answer sheets using EasyOCR, extracts line-level spatial bounding boxes, segments answer blocks by question number, grades answer content against a fractional point rubric using sentence embedding similarity (`all-MiniLM-L6-v2`), and flags edge cases (strikethroughs, margin notes, cross-page spills) with confidence calibration labels.
 
 ## Pipeline Architecture
 
@@ -11,39 +11,53 @@ The processing pipeline is divided into four decoupled stages:
 
 | Stage | Description | Module File |
 | :--- | :--- | :--- |
-| **1. Extract** | Preprocesses page images, extracts bounding box ROI regions, filters noise, flags strikethroughs, and reads text tokens. | [`src/ocr_engine.py`](file:///src/ocr_engine.py) |
-| **2. Structure** | Parses question headers, stitches multi-page answer continuations (e.g., Q3 spanning pages 1 & 2), separates margin notes, and isolates diagram blocks. | [`src/layout_segmenter.py`](file:///src/layout_segmenter.py) |
-| **3. Score** | Computes cosine similarity between student text embeddings and rubric criteria descriptions using `sentence-transformers`. | [`src/semantic_scorer.py`](file:///src/semantic_scorer.py) |
-| **4. Flag Confidence** | Evaluates OCR legibility, strikethroughs, diagram presence, and semantic ambiguity to assign a confidence rating (`HIGH`, `MEDIUM`, `LOW`) with a detailed reason. | [`src/confidence_calibrator.py`](file:///src/confidence_calibrator.py) |
+| **1. Extract** | Preprocesses page images, detects text bounding boxes using live EasyOCR, groups word boxes into lines, filters noise, and detects strikethroughs via HSV color thresholding. | [`src/ocr_engine.py`](src/ocr_engine.py) |
+| **2. Structure** | Parses question headers requiring explicit header keywords (`Ans`, `Q`), stitches multi-page answer continuations, assigns margin notes to the nearest header above on the page, and isolates diagram blocks. | [`src/layout_segmenter.py`](src/layout_segmenter.py) |
+| **3. Score** | Computes cosine similarity between student text embeddings and rubric criteria descriptions using `sentence-transformers` (`all-MiniLM-L6-v2`). | [`src/semantic_scorer.py`](src/semantic_scorer.py) |
+| **4. Flag Confidence** | Evaluates real OCR legibility scores, strikethroughs, diagram presence, cross-page continuation markers, and semantic ambiguity to assign a confidence rating (`HIGH`, `MEDIUM`, `LOW`). | [`src/confidence_calibrator.py`](src/confidence_calibrator.py) |
 
-The complete sequence is orchestrated by [`src/pipeline.py`](file:///src/pipeline.py).
+The complete sequence is orchestrated by [`src/pipeline.py`](src/pipeline.py).
+
+## Recent Fixes & Improvements ("What Changed")
+
+1. **Live EasyOCR Pipeline:** Replaced hardcoded fallback text parser with live EasyOCR image recognition (`download_enabled=True`). If OCR fails or detects no text, the pipeline raises a clear runtime exception rather than silently using placeholder text.
+2. **Fixed Question Segmentation Bug:** Resolved a bug where bare line numbers (e.g. `1. SYN: ...`, `2. SYN-ACK: ...`) were misidentified as question headers. Header parsing now strictly requires explicit keywords (`Ans`, `Answer`, `Q`, `Question`).
+3. **Correct Margin Note Attribution:** Margin notes are now attached to the single nearest question header above or at the note's vertical position on that page, rather than every question on the page.
+4. **OCR WER Accuracy Evaluation:** Added [`evaluate_ocr.py`](evaluate_ocr.py) to benchmark OCR output against [`sample_data/ground_truth.json`](sample_data/ground_truth.json).
+5. **Unit Test Suite:** Added pytest test suite in [`tests/test_segmenter.py`](tests/test_segmenter.py) verifying header segmentation, multi-page stitching, margin note attribution, and strikethrough exclusion.
 
 ## Folder Structure
 
 ```
 .
-├── APPROACH_NOTE.md           # Detailed technical approach and architecture design note
+├── APPROACH_NOTE.md           # Technical approach note and honest system limitations
 ├── README.md                  # Project documentation and run instructions
+├── evaluate_ocr.py            # OCR Word Error Rate (WER) accuracy benchmark script
 ├── generate_sample_dataset.py # Script for generating synthetic handwritten answer sheets
 ├── requirements.txt           # Python package dependencies
-├── run_evaluation.py          # Entry point execution script
+├── run_evaluation.py          # Pipeline execution script
 ├── output/                    # Evaluation output deliverables
-│   ├── annotated_page1.png    # Page 1 spatial bounding box annotation overlay
-│   ├── annotated_page2.png    # Page 2 spatial bounding box annotation overlay
-│   ├── evaluation_results.csv # Evaluation summary in CSV format
-│   └── evaluation_results.json# Detailed JSON breakdown with per-criterion scores
-├── sample_data/               # Input sample data files
+│   ├── annotated_page1.png    # Page 1 bounding box annotation overlay
+│   ├── annotated_page2.png    # Page 2 bounding box annotation overlay
+│   ├── evaluation_results.csv # Tabular CSV evaluation summary
+│   ├── evaluation_results.json# Detailed JSON breakdown with per-criterion scores
+│   └── ocr_accuracy.json     # EasyOCR WER accuracy benchmark results
+├── sample_data/               # Input sample dataset
 │   ├── answer_sheet_page1.png # Page 1 sample handwritten answer sheet image
 │   ├── answer_sheet_page2.png # Page 2 sample handwritten answer sheet image
-│   ├── rubric.json            # Grading rubric criteria and point distribution
-│   └── source_metadata.json   # Source metadata for sample input
-└── src/                       # Core python pipeline modules
+│   ├── ground_truth.json      # Ground truth text lines for OCR WER benchmarking
+│   ├── rubric.json            # Grading rubric criteria (expected_score set to null)
+│   └── source_metadata.json   # Source metadata for synthetic dataset
+├── src/                       # Core python pipeline modules
+│   ├── __init__.py
+│   ├── confidence_calibrator.py
+│   ├── layout_segmenter.py
+│   ├── ocr_engine.py
+│   ├── pipeline.py
+│   └── semantic_scorer.py
+└── tests/                     # Unit test suite
     ├── __init__.py
-    ├── confidence_calibrator.py
-    ├── layout_segmenter.py
-    ├── ocr_engine.py
-    ├── pipeline.py
-    └── semantic_scorer.py
+    └── test_segmenter.py
 ```
 
 ## Setup and How to Run
@@ -59,47 +73,51 @@ pip install -r requirements.txt
 ```
 
 ### Execution
-Run the complete evaluation pipeline:
-```bash
-python run_evaluation.py
-```
 
-If the sample image files in `sample_data/` are missing, `run_evaluation.py` will automatically invoke `generate_sample_dataset.py` to recreate them before running the evaluation.
+1. **Run Evaluation Pipeline:**
+   ```bash
+   python run_evaluation.py
+   ```
+
+2. **Run OCR Accuracy Benchmark:**
+   ```bash
+   python evaluate_ocr.py
+   ```
+
+3. **Run Unit Tests:**
+   ```bash
+   python -m pytest
+   ```
 
 ## Output Files
 
 Executing the pipeline populates the `output/` directory with:
-- **`output/evaluation_results.json`**: Complete JSON output containing total score, per-question score breakdown, similarity metrics, confidence labels, and confidence calibration reasons.
-- **`output/evaluation_results.csv`**: Tabular CSV summary containing question scores, confidence levels, and extracted text snippets.
-- **`output/annotated_page1.png` & `output/annotated_page2.png`**: Inspection image overlays highlighting detected text blocks (green), margin notes (orange), and strikethrough lines (red).
+- **`output/evaluation_results.json`**: Complete JSON output containing total score, expected scores (`null`), score difference, per-question score breakdown, similarity metrics, confidence labels, and confidence calibration reasons.
+- **`output/evaluation_results.csv`**: CSV summary containing question scores, expected scores, score differences, confidence levels, and extracted text snippets.
+- **`output/ocr_accuracy.json`**: Benchmark results comparing EasyOCR output against ground truth text, reporting WER per page and overall.
+- **`output/annotated_page1.png` & `output/annotated_page2.png`**: Visual inspection overlays highlighting detected text blocks (green), margin notes (orange), and strikethrough lines (red).
 
 ## Evaluation Results
 
-Evaluation summary on the sample 2-page dataset (Max Total Marks: 20.0):
+Evaluation summary on the synthetic 2-page sample dataset (Max Total Marks: 20.0):
 
-| Question | Score | Confidence Label | Summary / Flag Reason |
-| :--- | :---: | :---: | :--- |
-| **Q1: TCP 3-Way Handshake** | **5.00 / 5.0** | `MEDIUM` | Passable answer clarity; Answer spills across multiple pages; Margin note present |
-| **Q2: Process vs Thread** | **4.24 / 5.0** | `MEDIUM` | Passable answer clarity; Answer spills across multiple pages; Margin note present; Ambiguous phrasing on 2 rubric criteria |
-| **Q3: OSI Reference Model** | **4.00 / 5.0** | `MEDIUM` | Passable answer clarity; Answer spills across multiple pages; Margin note present; Ambiguous phrasing on 2 rubric criteria |
-| **Q4: DNS Resolution Mechanism** | **3.26 / 5.0** | `LOW` | Requires human double-check: Crossed-out text detected (`UDP is never used...`); Margin note present; Ambiguous phrasing on 2 rubric criteria |
+| Question | Score | Expected Score | Confidence Label | Summary / Flag Reason |
+| :--- | :---: | :---: | :---: | :--- |
+| **Q1: TCP 3-Way Handshake** | **5.00 / 5.0** | *null* | `MEDIUM` | `[EasyOCR Conf: 0.702]` Passable answer clarity; Low OCR legibility score |
+| **Q2: Process vs Thread** | **5.00 / 5.0** | *null* | `MEDIUM` | `[EasyOCR Conf: 0.702]` Passable answer clarity; Low OCR legibility score |
+| **Q3: OSI Reference Model** | **5.00 / 5.0** | *null* | `MEDIUM` | `[EasyOCR Conf: 0.678]` Passable answer clarity; Explicit continuation marker verified; Low OCR legibility score |
+| **Q4: DNS Resolution Mechanism** | **5.00 / 5.0** | *null* | `LOW` | `[EasyOCR Conf: 0.641]` Requires human double-check: Strikethrough text detected (`HDEis heYer_uSed...`); Margin note present (`+1 Mark Bonus ...`); Low OCR legibility score |
+
+*Note: `expected_score` values are set to `null` in `sample_data/rubric.json` pending user answer key input.*
+
+## OCR Accuracy Benchmark
+
+Benchmarked using [`evaluate_ocr.py`](evaluate_ocr.py) against [`sample_data/ground_truth.json`](sample_data/ground_truth.json):
+
+* **Overall Word Error Rate (WER):** `0.4086` (59.14% Word Accuracy)
+* **Page 1 WER:** `0.3458`
+* **Page 2 WER:** `0.5074`
 
 ## Source of Sample Data
 
-The two sample answer sheet images (`sample_data/answer_sheet_page1.png` and `sample_data/answer_sheet_page2.png`) are synthetic sample files generated programmatically by [`generate_sample_dataset.py`](file:///generate_sample_dataset.py). The generator renders text using natural handwriting TTF fonts (e.g. Segoe Script, Ink Free) onto a procedurally generated paper texture background with ruled notebook lines, hand-drawn diagrams, red margin lines, and slight affine camera rotation.
-
-## Known Limitations and Next Steps
-
-*(Adapted from [`APPROACH_NOTE.md`](file:///APPROACH_NOTE.md))*
-
-### Known Limitations
-- **Handwriting Variance:** Highly cursive, unaligned, or faint handwriting can degrade OCR detection, introducing character recognition artifacts.
-- **Basic Diagram Parsing:** Current diagram handling relies on bounding box layout isolation and text extraction inside diagrams, but lacks deep multi-modal semantic validation of hand-drawn flowcharts or schematics.
-- **Mathematical & Chemical Notation:** Equations, fraction bars, and chemical formulas are currently parsed as plain text lines rather than structured LaTeX syntax trees.
-- **Implicit Transitions:** Answers without explicit question headers (e.g., `Q1`, `Ans 2`) rely on spatial clustering heuristics.
-
-### Next Steps & Future Enhancements
-- **Vision-Language Models (VLM):** Transitioning to multimodal vision-language models (e.g., Qwen2-VL, Donut, or TrOCR) fine-tuned on real handwritten exam scripts.
-- **Multimodal Diagram & Symbol Evaluation:** Integrating GNNs or SVG parsing for structural verification of diagrams, circuit schematics, and geometric figures.
-- **Active Learning & Feedback:** Feeding human evaluator double-check corrections back into a vector database (RAG) to dynamically calibrate scoring thresholds.
-- **Distributed Scale:** Implementing async queue processing (Apache Kafka + Ray worker pool) with GPU batch inference to process large volumes of pages efficiently.
+The sample answer sheet images (`sample_data/answer_sheet_page1.png` and `sample_data/answer_sheet_page2.png`) are synthetic sample files generated programmatically by [`generate_sample_dataset.py`](generate_sample_dataset.py). The generator renders text using Windows handwriting fonts (Segoe Script, Ink Free) onto a procedurally generated paper texture background with ruled notebook lines, hand-drawn diagram boxes, red margin lines, and slight affine camera rotation.

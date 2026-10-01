@@ -4,6 +4,7 @@
   "questions": [
     {
       "question_no": "Q1",
+      "expected_score": null,
       "max_marks": 5.0,
       "title": "TCP 3-Way Handshake",
       "question_text": "Explain the TCP 3-Way Handshake mechanism for establishing a reliable connection.",
@@ -33,6 +34,7 @@
     },
     {
       "question_no": "Q2",
+      "expected_score": null,
       "max_marks": 5.0,
       "title": "Process vs Thread",
       "question_text": "Distinguish between a Process and a Thread in Operating Systems.",
@@ -57,6 +59,7 @@
     },
     {
       "question_no": "Q3",
+      "expected_score": null,
       "max_marks": 5.0,
       "title": "OSI Reference Model",
       "question_text": "Describe the 7 layers of the OSI Reference Model and their main functions, with a diagram.",
@@ -81,6 +84,7 @@
     },
     {
       "question_no": "Q4",
+      "expected_score": null,
       "max_marks": 5.0,
       "title": "DNS Resolution Mechanism",
       "question_text": "What is DNS resolution and how does recursive vs iterative resolution differ?",

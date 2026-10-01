@@ -1,10 +1,10 @@
 {
-  "dataset_name": "CNV AI Labs Hand-written Exam Answer Sheet Benchmark",
+  "dataset_name": "CNV AI Labs Synthetic Exam Answer Sheet Sample",
   "domain": "Computer Science - Computer Networks & Operating Systems",
   "num_pages": 2,
   "num_questions": 4,
-  "source_type": "Realistic Synthesized Handwritten Exam Script with Scanned Artifacts",
-  "source_description": "Handwritten student exam answer sheet containing 4 university-level questions. Includes real-world handwriting variations, multi-page answer continuation (Q3 spills from Page 1 to Page 2), inline architectural diagrams (OSI Layer diagram interrupting Q3 text), margin comments ('+1 mark bonus', 'Check fig 3.1'), crossed-out text, and light scan distortion artifacts (paper texture, slight rotation noise, margin guidelines).",
+  "source_type": "Synthetic Handwritten-Style Sample Dataset",
+  "source_description": "Synthetic 2-page student answer sheet generated programmatically using PIL and OpenCV. Rendered using Windows handwriting fonts (Ink Free and Segoe Script) onto a generated paper texture background with blue ruled lines, red margin guidelines, hand-drawn diagram boxes, red strikethrough lines, and slight affine rotation. Contains 4 Computer Science exam questions (Q1: TCP Handshake, Q2: Process vs Thread, Q3: OSI Model with cross-page spill, Q4: DNS Resolution with strikethrough line and margin note).",
   "ground_truth_mapping": {
     "page_1": ["Q1 (Complete)", "Q2 (Complete)", "Q3 (Part 1 - Text & OSI Diagram)"],
     "page_2": ["Q3 (Part 2 - Continuation of layer functions)", "Q4 (Complete with crossed-out line & margin note)"]

@@ -55,11 +55,16 @@ def render_real_handwritten_page(page_num, content_blocks):
     draw = ImageDraw.Draw(img)
 
     # Native Windows Handwriting TTF Fonts
-    font_inkfree_large = ImageFont.truetype(r"C:\Windows\Fonts\Inkfree.ttf", 26)
-    font_inkfree_main = ImageFont.truetype(r"C:\Windows\Fonts\Inkfree.ttf", 22)
-    font_segoe_script = ImageFont.truetype(r"C:\Windows\Fonts\segoesc.ttf", 21)
-    font_segoe_print = ImageFont.truetype(r"C:\Windows\Fonts\segoepr.ttf", 22)
-    font_segoe_bold = ImageFont.truetype(r"C:\Windows\Fonts\segoeprb.ttf", 22)
+    try:
+        font_inkfree_large = ImageFont.truetype(r"C:\Windows\Fonts\Inkfree.ttf", 26)
+        font_inkfree_main = ImageFont.truetype(r"C:\Windows\Fonts\Inkfree.ttf", 22)
+        font_segoe_script = ImageFont.truetype(r"C:\Windows\Fonts\segoesc.ttf", 21)
+        font_segoe_print = ImageFont.truetype(r"C:\Windows\Fonts\segoepr.ttf", 22)
+        font_segoe_bold = ImageFont.truetype(r"C:\Windows\Fonts\segoeprb.ttf", 22)
+    except Exception as e:
+        print("[Dataset Generator Warning] This generator needs Windows fonts Ink Free and Segoe Script.")
+        font_inkfree_large = font_inkfree_main = font_segoe_script = font_segoe_print = font_segoe_bold = ImageFont.load_default()
+
 
     margin_x = 140
     header_h = 160

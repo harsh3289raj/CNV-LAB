@@ -57,9 +57,15 @@ class EvaluationPipeline:
             q_no = ans["question_no"]
             q_rubric = self.rubric_dict.get(q_no, {})
             
+            exp_score = q_rubric.get("expected_score", None)
+            if exp_score is None:
+                print(f"[Warning] 'expected_score' for {q_no} is null in rubric.json. Please fill in expected scores from your answer key.")
+
             # Step 3: Score
             score, max_marks, criteria_breakdown = self.semantic_scorer.score_answer(ans, q_rubric)
             
+            score_diff = round(score - exp_score, 2) if exp_score is not None else None
+
             # Compute average OCR confidence for answer's elements
             q_ocr_confs = []
             for p_idx in ans["pages"]:
@@ -84,6 +90,8 @@ class EvaluationPipeline:
                 "spills_across_pages": ans["is_multipage_spill"],
                 "score": score,
                 "max_marks": max_marks,
+                "expected_score": exp_score,
+                "score_difference": score_diff,
                 "score_vs_rubric": f"{score}/{max_marks}",
                 "rubric_breakdown": criteria_breakdown,
                 "confidence_label": conf_label,
@@ -92,7 +100,7 @@ class EvaluationPipeline:
             }
 
             results.append(result_entry)
-            print(f" -> [{q_no}] Score: {score}/{max_marks} | Confidence: {conf_label} | Reason: {conf_reason}")
+            print(f" -> [{q_no}] Score: {score}/{max_marks} (Expected: {exp_score}) | Confidence: {conf_label} | Reason: {conf_reason}")
 
         # Save JSON output
         json_output_path = os.path.join(output_dir, "evaluation_results.json")
@@ -110,15 +118,17 @@ class EvaluationPipeline:
         with open(csv_output_path, 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
             writer.writerow([
-                "question_no", "score", "max_marks", "score_vs_rubric", 
-                "confidence_label", "confidence_reason", "extracted_answer_text", 
-                "has_diagram", "crossed_out_content", "spills_across_pages"
+                "question_no", "score", "max_marks", "expected_score", "score_difference",
+                "score_vs_rubric", "confidence_label", "confidence_reason", 
+                "extracted_answer_text", "has_diagram", "crossed_out_content", "spills_across_pages"
             ])
             for r in results:
                 writer.writerow([
-                    r["question_no"], r["score"], r["max_marks"], r["score_vs_rubric"],
-                    r["confidence_label"], r["confidence_reason"], r["extracted_answer_text"],
-                    r["has_diagram"], r["crossed_out_content"], r["spills_across_pages"]
+                    r["question_no"], r["score"], r["max_marks"], 
+                    r["expected_score"] if r["expected_score"] is not None else "",
+                    r["score_difference"] if r["score_difference"] is not None else "",
+                    r["score_vs_rubric"], r["confidence_label"], r["confidence_reason"], 
+                    r["extracted_answer_text"], r["has_diagram"], r["crossed_out_content"], r["spills_across_pages"]
                 ])
 
         # Generate Visual Bounding Box Annotations

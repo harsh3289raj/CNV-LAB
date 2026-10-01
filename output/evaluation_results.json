@@ -1,19 +1,21 @@
 {
   "subject": "Computer Networks & Operating Systems",
-  "total_score": 16.5,
+  "total_score": 20.0,
   "total_max_marks": 20,
   "evaluated_questions": [
     {
       "question_no": "Q1",
       "question_title": "TCP 3-Way Handshake",
-      "extracted_answer_text": "The TCP 3-way handshake is used to establish a reliable connection between client and server. SYN: Client sends a SYN segment with initial sequence number (ISN = X) to server. Recursive Resolution: Client delegates full lookup to local recursive resolver. The resolver traverses Root -> TLD -> Authoritative DNS servers on behalf of client.",
+      "extracted_answer_text": "The TCP 3-way handshake is used to establish a reliable Connection between client and server. 1. SYN: Client Sends 4 SYN segment with iitial seduence number (TSN X) to server 2 SYN-ACK: Server receives SYN and responds with SYN-ACK, acknowledging X+1 and sending Sed Y. 3.ACK: Client sends ACK packet acknowledging Yr1 to Confirm Conection: State transition goes from LISTEN SYN_SENT SYN_RCvD -> ESTABLISHED.",
       "has_diagram": false,
       "diagram_components": "",
       "crossed_out_content": "",
-      "margin_notes": "+1 Mark Bonus Check RFC 1035",
-      "spills_across_pages": true,
+      "margin_notes": "",
+      "spills_across_pages": false,
       "score": 5.0,
       "max_marks": 5.0,
+      "expected_score": null,
+      "score_difference": null,
       "score_vs_rubric": "5.0/5.0",
       "rubric_breakdown": [
         {
@@ -21,99 +23,103 @@
           "description": "Client sends SYN packet with an initial sequence number (ISN).",
           "points_awarded": 1.5,
           "max_points": 1.5,
-          "similarity_score": 0.873
+          "similarity_score": 0.872
         },
         {
           "criterion_id": "c2",
           "description": "Server responds with SYN-ACK packet, acknowledging client ISN and sending its own sequence number.",
           "points_awarded": 1.5,
           "max_points": 1.5,
-          "similarity_score": 0.753
+          "similarity_score": 0.872
         },
         {
           "criterion_id": "c3",
           "description": "Client sends ACK packet to confirm server response, establishing full-duplex connection.",
           "points_awarded": 1.0,
           "max_points": 1.0,
-          "similarity_score": 0.745
+          "similarity_score": 0.872
         },
         {
           "criterion_id": "c4",
           "description": "Mention of sequence number synchronization or state transitions (LISTEN -> SYN_SENT -> SYN_RCVD -> ESTABLISHED).",
           "points_awarded": 1.0,
           "max_points": 1.0,
-          "similarity_score": 0.745
+          "similarity_score": 0.872
         }
       ],
       "confidence_label": "MEDIUM",
       "confidence_score": 0.75,
-      "confidence_reason": "Passable answer clarity; Answer spills across multiple pages (cross-page continuation stitched) | Margin note present ('+1 Mark Bonus Check RFC 1035...')"
+      "confidence_reason": "[EasyOCR Conf: 0.702] Passable answer clarity; Low OCR legibility score (0.702)"
     },
     {
       "question_no": "Q2",
       "question_title": "Process vs Thread",
-      "extracted_answer_text": "SYN-ACK: Server receives SYN and responds with SYN-ACK, acknowledging X+1 and sending seq Y. A Process is an independent program in execution with isolated virtual address space. A Thread is a lightweight unit of execution within a process that shares code and heap memory. Context switching in processes requires reloading page tables, so it is high overhead. Thread context switching is fast as they share address space. Fault Isolation: Process crash is isolated, but a faulty thread can crash the whole process. Iterative Resolution: DNS server returns referral address of next server to client. The client makes follow-up queries step-by-step until resolved.",
+      "extracted_answer_text": "Process is an independent program in execution with isolated virtual address space Thread iy a lightweight unit of execution within a process that shares code and heap me Context switching in processes requires reloading page tabless so itishigh overhead Thread context switching is fastas they share address space: Fault Isolation: Process crash is isolated, buta faulty thread can crash the whole process:",
       "has_diagram": false,
       "diagram_components": "",
       "crossed_out_content": "",
-      "margin_notes": "+1 Mark Bonus Check RFC 1035",
-      "spills_across_pages": true,
-      "score": 4.24,
+      "margin_notes": "",
+      "spills_across_pages": false,
+      "score": 5.0,
       "max_marks": 5.0,
-      "score_vs_rubric": "4.24/5.0",
+      "expected_score": null,
+      "score_difference": null,
+      "score_vs_rubric": "5.0/5.0",
       "rubric_breakdown": [
         {
           "criterion_id": "c1",
           "description": "Definition: Process is an independent executing program with isolated address space (code, data, heap), while a thread is a lightweight execution unit within a process sharing memory/resources.",
           "points_awarded": 2.0,
           "max_points": 2.0,
-          "similarity_score": 0.786
+          "similarity_score": 0.791
         },
         {
           "criterion_id": "c2",
           "description": "Resource & Overhead: Processes require heavy context switching and independent memory allocation. Threads share process memory and have fast lightweight context switching.",
-          "points_awarded": 1.12,
+          "points_awarded": 1.5,
           "max_points": 1.5,
-          "similarity_score": 0.699
+          "similarity_score": 0.791
         },
         {
           "criterion_id": "c3",
           "description": "Fault Isolation & IPC: Process crash does not affect other processes (high fault isolation) and uses IPC (pipes, sockets). Thread crash can bring down entire process, but inter-thread communication is faster via shared memory.",
-          "points_awarded": 1.12,
+          "points_awarded": 1.5,
           "max_points": 1.5,
-          "similarity_score": 0.697
+          "similarity_score": 0.791
         }
       ],
       "confidence_label": "MEDIUM",
-      "confidence_score": 0.6,
-      "confidence_reason": "Passable answer clarity; Answer spills across multiple pages (cross-page continuation stitched) | Margin note present ('+1 Mark Bonus Check RFC 1035...') | Ambiguous phrasing on 2 rubric criteria requiring semantic human verification"
+      "confidence_score": 0.75,
+      "confidence_reason": "[EasyOCR Conf: 0.702] Passable answer clarity; Low OCR legibility score (0.702)"
     },
     {
       "question_no": "Q3",
       "question_title": "OSI Reference Model",
-      "extracted_answer_text": "ACK: Client sends ACK packet acknowledging Y+1 to confirm connection. State transition goes from LISTEN -> SYN_SENT -> SYN_RCVD -> ESTABLISHED. (Continued from Page 1): Key Layer Functions",
+      "extracted_answer_text": "The OSI modelhas 7 layers for network protocol standardization Presentation Layer (Encryption, Encoding 5. Session Layer (Dialog Control) Transport Layer (TCP/UDF, End-+o-End) 3. Network Layer (Ip Pouting Ans 3 (Continued from Page 1); Key Layer Functions Detailed functions of primary OSI layers: Data Link Layer: Handles mode-to-node framing, MAC addressing; and hardware error detection: Network Layer: Performs logical Ip addressing; packet forwarding, and path routing across subnetworks. Tramsport Layer: Guarantees end-to-end reliability sequence reordering, segmenting, and port mapping:",
       "has_diagram": true,
-      "diagram_components": "The OSI model has 7 layers for network protocol standardization. | Below is the layer architecture diagram: | --- OSI 7-LAYER ARCHITECTURE --- 7. Application Layer (HTTP, FTP) 6. Presentation Layer 5. Session Layer 4. Transport Layer 3. Network Layer 2. Data Link Layer 1. Physical Layer | Detailed functions of primary OSI layers: | - Data Link Layer: Handles node-to-node framing, MAC addressing, and hardware error detection. | - Network Layer: Performs logical IP addressing, packet forwarding, and path routing across subnetworks. | - Transport Layer: Guarantees end-to-end reliability, sequence reordering, segmenting, and port mapping.",
+      "diagram_components": "Below is the layer architecture diagram: | OSI 7-LAYER ARCHITECTURB | 7. Application Layer (HTTP, FTP) | 2. Data Limk Layer (MAC Framing | Physical Layer (Bi+s, Cables)",
       "crossed_out_content": "",
-      "margin_notes": "+1 Mark Bonus Check RFC 1035",
+      "margin_notes": "",
       "spills_across_pages": true,
-      "score": 4.0,
+      "score": 5.0,
       "max_marks": 5.0,
-      "score_vs_rubric": "4.0/5.0",
+      "expected_score": null,
+      "score_difference": null,
+      "score_vs_rubric": "5.0/5.0",
       "rubric_breakdown": [
         {
           "criterion_id": "c1",
           "description": "Correct enumeration of 7 layers in top-down or bottom-up order: Physical, Data Link, Network, Transport, Session, Presentation, Application.",
-          "points_awarded": 1.5,
+          "points_awarded": 2.0,
           "max_points": 2.0,
-          "similarity_score": 0.637
+          "similarity_score": 0.735
         },
         {
           "criterion_id": "c2",
           "description": "Key functions: Data Link (framing, MAC address, error detection), Network (routing, IP addressing), Transport (end-to-end reliability, segmentation, port numbers).",
-          "points_awarded": 1.5,
+          "points_awarded": 2.0,
           "max_points": 2.0,
-          "similarity_score": 0.637
+          "similarity_score": 0.735
         },
         {
           "criterion_id": "c3",
@@ -124,108 +130,72 @@
         }
       ],
       "confidence_label": "MEDIUM",
-      "confidence_score": 0.6,
-      "confidence_reason": "Passable answer clarity; Answer spills across multiple pages (cross-page continuation stitched) | Margin note present ('+1 Mark Bonus Check RFC 1035...') | Ambiguous phrasing on 2 rubric criteria requiring semantic human verification"
+      "confidence_score": 0.7,
+      "confidence_reason": "[EasyOCR Conf: 0.678] Passable answer clarity; Answer spills across multiple pages (explicit continuation marker verified) | Low OCR legibility score (0.678)"
     },
     {
       "question_no": "Q4",
       "question_title": "DNS Resolution Mechanism",
-      "extracted_answer_text": "DNS (Domain Name System) translates human-readable hostnames into IP addresses.",
+      "extracted_answer_text": "DNS (Domain Name System) translates human-readable hostnames into-IP addresses Types of resolution queries: 1. Recursive Resolution: Client delegates full lookup to local recursive resolver. The resolver traverses Poot TLD -> Authoritative DNS servers on behalf 6f client 2. Iterative Pesolution: DNS server returms referral address f next server to clent; The client makes follow-UP queries step-by-Step until resolved",
       "has_diagram": false,
       "diagram_components": "",
-      "crossed_out_content": "UDP is never used for DNS queries because IP packets get lost easily.",
-      "margin_notes": "+1 Mark Bonus Check RFC 1035",
+      "crossed_out_content": "HDEis heYer_uSed fbx_DNS dueries beLause TEparkets aet bst easih",
+      "margin_notes": "+1 Mark Bonus ; Check RFC 1035",
       "spills_across_pages": false,
-      "score": 3.26,
+      "score": 5.0,
       "max_marks": 5.0,
-      "score_vs_rubric": "3.26/5.0",
+      "expected_score": null,
+      "score_difference": null,
+      "score_vs_rubric": "5.0/5.0",
       "rubric_breakdown": [
         {
           "criterion_id": "c1",
           "description": "DNS maps human-readable domain names (hostnames) to numeric IP addresses.",
           "points_awarded": 1.5,
           "max_points": 1.5,
-          "similarity_score": 0.867
+          "similarity_score": 0.824
         },
         {
           "criterion_id": "c2",
           "description": "Recursive resolution: Client asks recursive resolver to find the IP; resolver performs all necessary upstream queries and returns the final answer.",
-          "points_awarded": 0.88,
+          "points_awarded": 1.75,
           "max_points": 1.75,
-          "similarity_score": 0.45
+          "similarity_score": 0.792
         },
         {
           "criterion_id": "c3",
           "description": "Iterative resolution: DNS server responds with referral to the next authoritative server (Root -> TLD -> Authoritative), requiring requester to make follow-up queries.",
-          "points_awarded": 0.88,
+          "points_awarded": 1.75,
           "max_points": 1.75,
-          "similarity_score": 0.45
+          "similarity_score": 0.703
         }
       ],
       "confidence_label": "LOW",
-      "confidence_score": 0.4,
-      "confidence_reason": "Requires human double-check: Crossed-out text detected ('UDP is never used for DNS queries becaus...') | Margin note present ('+1 Mark Bonus Check RFC 1035...') | Ambiguous phrasing on 2 rubric criteria requiring semantic human verification"
+      "confidence_score": 0.3,
+      "confidence_reason": "[EasyOCR Conf: 0.641] Requires human double-check: Strikethrough text detected: 'HDEis heYer_uSed fbx_DNS dueries beLause...' | Margin note present: '+1 Mark Bonus ; Check RFC 1035...' | Low OCR legibility score (0.641)"
     }
   ],
   "detected_margin_notes": [
     {
-      "page": 1,
-      "text": "Q1.",
+      "page": 2,
+      "y": 440,
+      "text": "+1 Mark Bonus",
       "bbox": [
-        35,
+        16,
+        440,
         180,
-        80,
-        30
-      ]
-    },
-    {
-      "page": 1,
-      "text": "Q2.",
-      "bbox": [
-        35,
-        430,
-        80,
-        30
-      ]
-    },
-    {
-      "page": 1,
-      "text": "Q3.",
-      "bbox": [
-        35,
-        680,
-        80,
-        30
+        28
       ]
     },
     {
       "page": 2,
-      "text": "Q3.",
+      "y": 468,
+      "text": "Check RFC 1035",
       "bbox": [
-        35,
-        180,
-        80,
-        30
-      ]
-    },
-    {
-      "page": 2,
-      "text": "Q4.",
-      "bbox": [
-        35,
-        390,
-        80,
-        30
-      ]
-    },
-    {
-      "page": 2,
-      "text": "+1 Mark Bonus Check RFC 1035",
-      "bbox": [
-        20,
-        410,
-        100,
-        50
+        16,
+        468,
+        194,
+        26
       ]
     }
   ]
